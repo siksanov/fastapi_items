@@ -1,0 +1,24 @@
+services:
+  db:
+    container_name: fastapi_items_db
+    image: postgres:17-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-api_db}
+    
+  api:
+    container_name: fastapi_items_api
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    image: donperez/fastapi_items
+    restart: always
+    ports:
+      - 8080:8000
+
+    
