@@ -8,14 +8,15 @@ from pydantic_core import MultiHostUrl
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
+        env_file='.env',
         env_ignore_empty=True)
     
-    API_V1_STR = '/api/v1'
+    API_V1_STR: str = '/api/v1'
     ALGORITHM: str = 'HS256'
 
     secret: str = token_urlsafe(32)
 
-    ACCESS_TOKEN_EXPIRE_MINUTES = 60
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     POSTGRES_SERVER: str = 'localhost'
     POSTGRES_PORT: int = 5432
