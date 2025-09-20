@@ -9,6 +9,7 @@ from models.user import User
 from sqlmodel import SQLModel
 from pydantic import ValidationError
 from core.db import SessionGet
+from core.conf import settings
 
 
 class TokenPayload(SQLModel):
@@ -16,26 +17,22 @@ class TokenPayload(SQLModel):
 
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    '/api/v1/users/signin'
+    f'{settings.API_V1_STR}/users/signin'
 )
 
-ALGORITHM = 'HS256'
-
 TokenGet = Annotated[str, Depends(reusable_oauth2)]
-
-secret = secrets.token_urlsafe(32)
 
 
 def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode = {'exp': expire, 'sub': str(subject)}
-    encoded_jwt = jwt.encode(to_encode, secret, ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.secret, settings.ALGORITHM)
     return encoded_jwt
 
 
 def auth_user(session: SessionGet, token: TokenGet):
     try:
-        payload = jwt.decode(token, secret, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.secret, algorithms=[settings.ALGORITHM])
         token_data = TokenPayload(**payload)
     except (InvalidTokenError, ValidationError):
         raise HTTPException(

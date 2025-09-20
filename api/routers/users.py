@@ -18,6 +18,7 @@ from core.db import (
     create_user,
     authenticate
 )
+from core.conf import Settings
 from core.auth import AuthUser, create_access_token
 
 router = APIRouter(prefix='/users', tags=['users'])
@@ -78,7 +79,7 @@ async def login_user(
             status.HTTP_400_BAD_REQUEST,
             'Пользователь деактивирован'
         )
-    access_token_expires = timedelta(minutes=60)
+    access_token_expires = timedelta(minutes=Settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     token = create_access_token(user.id, access_token_expires)
     return {'access_token': token, 'token_type': 'Bearer'}
 

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import items, users
-
+from core.conf import settings
 
 app = FastAPI()
 
@@ -21,5 +21,5 @@ app.add_middleware(
 async def home():
     return {'message': 'Hello, World!!!'}
 
-app.include_router(items.router, prefix='/api/v1')
-app.include_router(users.router, prefix='/api/v1')
+app.include_router(items.router, prefix=settings.API_V1_STR)
+app.include_router(users.router, prefix=settings.API_V1_STR)

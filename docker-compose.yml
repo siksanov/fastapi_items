@@ -1,3 +1,7 @@
+networks:
+  web:
+    driver: bridge
+
 services:
   db:
     container_name: fastapi_items_db
@@ -5,12 +9,36 @@ services:
     restart: always
     ports:
       - 5432:5432
+    env_file:
+      - .env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_DB=${POSTGRES_DB:-api_db}
-    
+    networks:
+      - web
+  
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=siksanov@icloud.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    networks:
+      - web
+
   api:
     container_name: fastapi_items_api
     build:
@@ -18,7 +46,14 @@ services:
       dockerfile: api/Dockerfile
     image: donperez/fastapi_items
     restart: always
-    ports:
-      - 8080:8000
-
-    
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host(`httpapi.duckdns.org`)"
+      - "traefik.http.routers.fastapi.entrypoints=websecure"
+      - "traefik.http.routers.fastapi.tls.certresolver=myresolver"
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    networks:
+      - web

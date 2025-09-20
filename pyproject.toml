@@ -26,3 +26,4 @@ reportUnknownParameterType = false
 reportMissingTypeStubs = false
 reportPrivateUsage = false
 reportImportCycles = false
+reportReturnType = false

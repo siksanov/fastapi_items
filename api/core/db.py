@@ -7,10 +7,10 @@ from fastapi import Depends
 from typing import Annotated, Any
 from models.user import User, UserCreate, UserUpdate
 from models.item import Item, ItemCreate
-
+from core.conf import settings
 
 engine = create_engine(
-    'postgresql+psycopg://postgres:postgres@fastapi_items_db:5432/api_db',
+    str(settings.SQLALCHEMY_DATABASE_URI),
     echo=True,)
 SQLModel.metadata.create_all(engine)
 
