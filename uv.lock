@@ -189,7 +189,7 @@ wheels = [
 ]
 
 [[package]]
-name = "fastapi-planner"
+name = "fastapi-items"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

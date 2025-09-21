@@ -92,8 +92,8 @@ async def delete_item(
     item = session.get(Item, id)
     if not item:
         raise HTTPException(status.HTTP_404_NOT_FOUND, 'Элемент не найден')
-    if not auth_user.is_superuser or (item.owner_id != auth_user.id):
+    if not auth_user.is_superuser and (item.owner_id != auth_user.id):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Недостаточно прав')
     session.delete(item)
     session.commit()
-    return {'message': f'Элемент {id} удалён'}
+    return {'message': f"Элемент <{item.title}> удалён"}

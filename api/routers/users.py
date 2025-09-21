@@ -18,7 +18,7 @@ from core.db import (
     create_user,
     authenticate
 )
-from core.conf import Settings
+from core.conf import settings
 from core.auth import AuthUser, create_access_token
 
 router = APIRouter(prefix='/users', tags=['users'])
@@ -79,7 +79,7 @@ async def login_user(
             status.HTTP_400_BAD_REQUEST,
             'Пользователь деактивирован'
         )
-    access_token_expires = timedelta(minutes=Settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     token = create_access_token(user.id, access_token_expires)
     return {'access_token': token, 'token_type': 'Bearer'}
 
@@ -101,11 +101,11 @@ async def delete_user(
             status.HTTP_404_NOT_FOUND,
             'Пользователь не найден'
         )
-    if not auth_user.is_superuser or (user.id != auth_user.id):
+    if not auth_user.is_superuser and (user.id != auth_user.id):
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
             'Недостаточно прав'
         )
     session.delete(user)
     session.commit()
-    return {'message': f'Элемент {id} удалён успешно'}
+    return {'message': f'Пользователь {id} удалён успешно'}
