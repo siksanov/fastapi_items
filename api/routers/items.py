@@ -44,7 +44,7 @@ async def read_items(
 async def read_item(
     session: SessionGet,
     auth_user: AuthUser,
-    id: uuid.UUID
+    id: str
 ) -> Any:
     item = session.get(Item, id)
     if not item:
@@ -68,7 +68,7 @@ async def new_item(
 async def update_item(
     session: SessionGet,
     auth_user: AuthUser,
-    id: uuid.UUID,
+    id: str,
     item_update: ItemUpdate
 ) -> Any:
     item = session.get(Item, id)
@@ -87,7 +87,7 @@ async def update_item(
 async def delete_item(
     session: SessionGet,
     auth_user: AuthUser,
-    id: uuid.UUID
+    id: str
 ) -> dict:
     item = session.get(Item, id)
     if not item:

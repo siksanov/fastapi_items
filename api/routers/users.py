@@ -37,7 +37,7 @@ async def read_users(
 
 @router.get('/{id}', response_model=UserPublic | User)
 async def read_user(
-    user_id: uuid.UUID,
+    user_id: str,
     session: SessionGet,
     auth_user: AuthUser
 ) -> Any:
@@ -52,7 +52,6 @@ async def register_user(
     session: SessionGet, user_register: UserRegister
 ) -> Any:
     user = get_user_by_email(session, user_register.email)
-    print(user)
     if user:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
@@ -93,7 +92,7 @@ async def recovery_auth_user():
 async def delete_user(
     session: SessionGet,
     auth_user: AuthUser,
-    id: uuid.UUID
+    id: str
 ) -> Any:
     user = session.get(User, id)
     if not user:

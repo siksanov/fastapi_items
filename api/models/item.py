@@ -18,15 +18,15 @@ class ItemUpdate(ItemBase):
 
 
 class Item(ItemBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    owner_id: uuid.UUID = Field(
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
+    owner_id: str = Field(
         foreign_key='user.id', nullable=False, ondelete='CASCADE')
     owner: User | None = Relationship(back_populates="items")
 
 
 class ItemPublic(ItemBase):
-    id: uuid.UUID
-    owner_id: uuid.UUID
+    id: str
+    owner_id: str
 
 
 class ItemsPublic(SQLModel):

@@ -1,5 +1,6 @@
 import uuid
 from collections.abc import Generator
+from warnings import deprecated
 from passlib.context import CryptContext
 
 from sqlmodel import create_engine, SQLModel, Session, select
@@ -10,7 +11,7 @@ from models.item import Item, ItemCreate
 from core.conf import settings
 
 engine = create_engine(
-    str(settings.SQLALCHEMY_DATABASE_URI),
+    str('sqlite:///.database.sql'),
     echo=True,)
 SQLModel.metadata.create_all(engine)
 
@@ -74,7 +75,7 @@ def authenticate(session: Session, email: str, password: str) -> User | None:
 
 def create_item(session: Session,
                 item_create: ItemCreate,
-                owner_id: uuid.UUID) -> Item:
+                owner_id: str) -> Item:
     db_item = Item.model_validate(item_create, update={'owner_id': owner_id})
     session.add(db_item)
     session.commit()
