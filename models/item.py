@@ -6,18 +6,17 @@ from models.user import User
 
 class ItemBase(SQLModel):
     title: str = Field(min_length=1, max_length=255,)
-    description: str | None = Field(default=None, max_length=255,)
 
 
 class ItemCreate(ItemBase):
-    pass
+    description: str | None = Field(default=None, max_length=255,)
 
 
-class ItemUpdate(ItemBase):
+class ItemUpdate(ItemCreate):
     title: str | None = Field(default=None, min_length=1, max_length=255,)
 
 
-class Item(ItemBase, table=True):
+class Item(ItemCreate, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID = Field(
         foreign_key='user.id', nullable=False, ondelete='CASCADE')
@@ -26,7 +25,6 @@ class Item(ItemBase, table=True):
 
 class ItemPublic(ItemBase):
     id: uuid.UUID
-    owner_id: uuid.UUID
 
 
 class ItemsPublic(SQLModel):

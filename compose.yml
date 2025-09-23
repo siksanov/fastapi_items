@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:18.4-alpine
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-fastapi_items_db}
+    volumes:
+      - data:/var/lib/postgresql
+
+  api:
+    build:
+      context: .
+    image: donperez/fastapi_items
+    restart: always
+    command: ${ENV:-fastapi run --workers 4 main.py}
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_SERVER=${POSTGRES_SERVER:-db}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-fastapi_items_db}
+    ports:
+      - 8080:8000
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+
+        - action: rebuild
+          path: pyproject.toml
+
+volumes:
+  data:

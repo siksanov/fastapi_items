@@ -42,9 +42,11 @@ async def read_user(
     auth_user: AuthUser
 ) -> Any:
     if user_id == auth_user.id:
-        return auth_user
+        return User.model_validate(auth_user)
     user = session.get(User, user_id)
-    return UserPublic(**user)
+    if not user:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, 'Пользователь не найден')
+    return UserPublic.model_validate(user)
 
 
 @router.post('/signup', response_model=UserPublic)
@@ -52,12 +54,10 @@ async def register_user(
     session: SessionGet, user_register: UserRegister
 ) -> Any:
     user = get_user_by_email(session, user_register.email)
-    print(user)
     if user:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
-            'Пользователь с таким адресом электронной почты \
-уже существует')
+            'Пользователь с таким адресом электронной почты уже существует')
     user_create = UserCreate.model_validate(user_register)
     user = create_user(session, user_create)
     return user
@@ -86,7 +86,7 @@ async def login_user(
 
 @router.patch('/{id}')
 async def recovery_auth_user():
-    pass
+    return 'Пока не реализовано'
 
 
 @router.delete('/{id}', response_model=dict)

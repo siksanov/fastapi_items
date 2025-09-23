@@ -21,7 +21,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 SessionGet = Annotated[Session, Depends(get_db)]
-context = CryptContext(schemes=['bcrypt'])
+context = CryptContext(schemes=['scrypt'])
 
 
 def verify_password(password: str, hashed_password: str):

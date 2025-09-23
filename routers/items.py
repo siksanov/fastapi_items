@@ -40,7 +40,7 @@ async def read_items(
     return ItemsPublic(data=items, count=count)
 
 
-@router.get('/{id}', response_model=ItemPublic)
+@router.get('/{id}', response_model=Item)
 async def read_item(
     session: SessionGet,
     auth_user: AuthUser,
@@ -54,7 +54,7 @@ async def read_item(
     return item
 
 
-@router.post('/', response_model=ItemPublic)
+@router.post('/', response_model=Item)
 async def new_item(
     session: SessionGet,
     auth_user: AuthUser,
@@ -64,7 +64,7 @@ async def new_item(
     return item
 
 
-@router.put('/{id}', response_model=ItemPublic)
+@router.put('/{id}', response_model=Item)
 async def update_item(
     session: SessionGet,
     auth_user: AuthUser,
@@ -96,4 +96,4 @@ async def delete_item(
         raise HTTPException(status.HTTP_400_BAD_REQUEST, 'Недостаточно прав')
     session.delete(item)
     session.commit()
-    return {'message': f"Элемент <{item.title}> удалён"}
+    return {'message': f"Элемент «{item.title}» удалён"}

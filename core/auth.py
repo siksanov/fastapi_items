@@ -1,5 +1,4 @@
 import jwt
-import secrets
 from jwt.exceptions import InvalidTokenError
 from datetime import timedelta, datetime, timezone
 from typing import Any, Annotated
