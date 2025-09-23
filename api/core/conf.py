@@ -8,7 +8,6 @@ from pydantic_core import MultiHostUrl
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file='.env',
         env_ignore_empty=True)
     
     API_V1_STR: str = '/api/v1'
