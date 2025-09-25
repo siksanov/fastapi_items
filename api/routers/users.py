@@ -44,8 +44,7 @@ async def read_user(
     if id == auth_user.id:
         return auth_user
     user = session.get(User, id)
-    return UserPublic(**user)
-
+    return UserPublic.model_validate(user)
 
 @router.post('/signup', response_model=UserPublic)
 async def register_user(
@@ -85,7 +84,7 @@ async def login_user(
 
 @router.patch('/{id}')
 async def recovery_auth_user():
-    pass
+    return 'Пока не реализовано'
 
 
 @router.delete('/{id}', response_model=dict)
