@@ -37,13 +37,13 @@ async def read_users(
 
 @router.get('/{id}', response_model=UserPublic | User)
 async def read_user(
-    user_id: str,
+    id: str,
     session: SessionGet,
     auth_user: AuthUser
 ) -> Any:
-    if user_id == auth_user.id:
+    if id == auth_user.id:
         return auth_user
-    user = session.get(User, user_id)
+    user = session.get(User, id)
     return UserPublic(**user)
 
 
