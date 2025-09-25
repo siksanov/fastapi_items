@@ -19,7 +19,7 @@ app.add_middleware(
 
 @app.get('/')
 async def home():
-    return {'message': 'Hello, World!!!'}
+    return {'Важное сообщение': 'Привет друг! Изучать апи это весело ;)'}
 
 app.include_router(items.router, prefix=settings.API_V1_STR)
 app.include_router(users.router, prefix=settings.API_V1_STR)
