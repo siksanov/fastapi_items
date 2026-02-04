@@ -5,11 +5,11 @@ from datetime import timedelta, datetime, timezone
 from typing import Any, Annotated
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, status, HTTPException
-from models.user import User
 from sqlmodel import SQLModel
 from pydantic import ValidationError
-from core.db import SessionGet
-from core.conf import settings
+from api.models.user import User
+from api.core.db import SessionGet
+from api.core.conf import settings
 
 
 class TokenPayload(SQLModel):

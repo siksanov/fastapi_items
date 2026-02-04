@@ -1,7 +1,7 @@
 import uuid
 from sqlmodel import SQLModel, Field, Relationship
 
-from models.user import User
+from api.models.user import User
 
 
 class ItemBase(SQLModel):

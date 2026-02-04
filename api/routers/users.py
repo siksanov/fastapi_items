@@ -5,21 +5,21 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlmodel import select, func
 from typing import Annotated, Any
 
-from models.user import (
+from api.models.user import (
     UsersPublic,
     UserPublic,
     User,
     UserRegister,
     UserCreate
 )
-from core.db import (
+from api.core.db import (
     SessionGet,
     get_user_by_email,
     create_user,
     authenticate
 )
-from core.conf import settings
-from core.auth import AuthUser, create_access_token
+from api.core.conf import settings
+from api.core.auth import AuthUser, create_access_token
 
 router = APIRouter(prefix='/users', tags=['users'])
 

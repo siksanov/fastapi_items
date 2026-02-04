@@ -1,17 +1,16 @@
-import uuid
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import select, func
 from typing import Any
 
-from models.item import (
+from api.models.item import (
     Item,
     ItemsPublic,
     ItemPublic,
     ItemCreate,
     ItemUpdate
 )
-from core.db import SessionGet, create_item
-from core.auth import AuthUser
+from api.core.db import SessionGet, create_item
+from api.core.auth import AuthUser
 
 
 router = APIRouter(prefix='/items', tags=['items'])
