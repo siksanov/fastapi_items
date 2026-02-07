@@ -1,13 +1,11 @@
 from collections.abc import Generator
-from warnings import deprecated
 from passlib.context import CryptContext
 
 from sqlmodel import create_engine, SQLModel, Session, select
 from fastapi import Depends
-from typing import Annotated, Any
+from typing import Annotated
 from api.models.user import User, UserCreate, UserUpdate
 from api.models.item import Item, ItemCreate
-from api.core.conf import settings
 
 engine = create_engine(
     str('sqlite:///.database.sql'),
@@ -21,7 +19,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 SessionGet = Annotated[Session, Depends(get_db)]
-context = CryptContext(schemes=['bcrypt'])
+context = CryptContext(schemes=['scrypt'])
 
 
 def verify_password(password: str, hashed_password: str):
